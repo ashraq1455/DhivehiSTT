@@ -5,7 +5,7 @@ from utils import STTPipeline, extractAudio
 
 input = "clip.mp3"
 temp_dir = "temp"
-model_dir = "models"
+model_dir = "model"
 silence_window = 1.0
 silence_weight = 0.3
 
