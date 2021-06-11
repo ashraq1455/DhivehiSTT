@@ -26,7 +26,7 @@ for w_file in tqdm(files):
 
     completed_text.append(transcription)
 
-print(completed_text)
+print("".join(completed_text))
 
 print("Removing temporary files...")
 shutil.rmtree(temp_dir)
