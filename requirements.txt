@@ -1,0 +1,6 @@
+librosa==0.8.0
+torch==1.8.1
+transformers==4.5.1
+pyaudioanalysis==0.3.6
+scipy==1.4.1
+tqdm==4.41.1
