@@ -1,8 +1,8 @@
 import os
 import torch
 import librosa
+from io import BytesIO
 from scipy.io import wavfile
-from pyAudioAnalysis.audioBasicIO import read_audio_file
 from pyAudioAnalysis.audioSegmentation import silence_removal
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2CTCTokenizer, Wav2Vec2Processor
 
@@ -36,20 +36,22 @@ class STTPipeline:
         transcription = self.processor.batch_decode(predicted_ids)[0]
         return transcription
 
-
-def extractAudio(input_file, output_dir, smoothing_window = 1.0, weight = 0.1):
+def extractAudio(audio_bytes, smoothing_window = 1.0, weight = 0.1):
     print("Detecting silences...")
-    [fs, x] = read_audio_file(input_file)
-    segmentLimits = silence_removal(x, fs, 0.05, 0.05, smoothing_window, weight)
-    ifile_name = os.path.basename(input_file)
+    [fs, x] = wavfile.read(BytesIO(audio_bytes))
 
-    os.makedirs(output_dir, exist_ok=True)
+    # uncomment to resample audio to 16kHz
+    # x = librosa.resample(x.astype("float32"), fs, 16000).astype("int32")
+
+    segmentLimits = silence_removal(x, fs, 0.05, 0.05, smoothing_window, weight)
+
+    os.makedirs("temp", exist_ok=True)
     files = []
 
     print("Writing segments...")
     for s in segmentLimits:
-        strOut = "{0:s}_{1:.3f}-{2:.3f}.wav".format(ifile_name, s[0], s[1])
-        strOut = os.path.join(output_dir, strOut)
+        strOut = "{0:s}_{1:.3f}-{2:.3f}.wav".format("temp", s[0], s[1])
+        strOut = os.path.join("temp", strOut)
         wavfile.write(strOut, fs, x[int(fs * s[0]):int(fs * s[1])])
         files.append(strOut)
 

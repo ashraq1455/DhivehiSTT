@@ -13,3 +13,4 @@ srt==3.4.1
 toml==0.10.2
 torch==1.8.1
 transformers==4.5.1
+scipy==1.6.2
