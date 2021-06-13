@@ -12,3 +12,4 @@ This repository contains code to run STT model used in the [DV-Subs](https://git
 from stt import transcribe
 transcription = transcribe(audio_bytes)
 ```
+If you want to use with http, run ```python main.py``` and send a ```POST``` request with the audio to ```predict/``` endpoint.
